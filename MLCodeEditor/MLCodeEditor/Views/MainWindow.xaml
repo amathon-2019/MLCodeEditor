@@ -24,9 +24,9 @@
         </Grid.RowDefinitions>
         <Menu >
             <MenuItem Header="_File">
-                <MenuItem x:Name="openBtn" Header="_Open" Click="openBtn_Click" />
-                <MenuItem x:Name="saveBtn" Header="_Save" Click="saveBtn_Click"/>
-                <MenuItem x:Name="talkBtn" Header="_Talk" Command="{Binding cClicktoTalk}"/>
+                <MenuItem x:Name="openBtn" Header="_Open" Click="{Binding cOpenFile}" />
+                <MenuItem x:Name="saveBtn" Header="_Save" Click="{Binding cSaveFile}"/>
+                <MenuItem x:Name="talkBtn" Header="_Talk" Command="{Binding cClickToTalk}"/>
                 <Separator />
                 <MenuItem x:Name="ExitBtn" Header="_Exit" Click="ExitBtn_Click" />
             </MenuItem>

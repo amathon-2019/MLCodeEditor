@@ -6,7 +6,20 @@ using Microsoft.CognitiveServices.Speech;
 
 namespace MLCodeEditor.Messages
 {
-    class MessageListener
+    enum SpeakOrder
+    {
+        제일위로, 
+        제일아래로,
+        스크롤내려,
+        스크롤올려,
+        저장하기,
+        저장하고나가기,
+        검색해줘,
+        확대하기,
+        축소하기
+    };
+
+    public class MessageListener
     {
         private SpeechConfig config;
 
@@ -17,8 +30,8 @@ namespace MLCodeEditor.Messages
         /// <param name="lang"></param>
         public MessageListener(string lang)
         {
-            this.config = SpeechConfig.FromSubscription(Environment.GetEnvironmentVariable("AZURE_KEY"), "westus");
-            config.SpeechRecognitionLanguage = lang;
+            //this.config = SpeechConfig.FromSubscription(Environment.GetEnvironmentVariable("AZURE_KEY"), "westus");
+            //config.SpeechRecognitionLanguage = lang;
         }
 
         public async Task<string> RecognizeSpeechSync()
