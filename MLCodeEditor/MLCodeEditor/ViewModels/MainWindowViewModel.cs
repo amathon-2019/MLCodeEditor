@@ -89,22 +89,24 @@ namespace MLCodeEditor.ViewModels
             _ea.GetEvent<ThemeMessage>().Subscribe(onChangeTheme);
             _ea.GetEvent<fontColorThemeMessage>().Subscribe(onChangeFontColorTheme);
             _ea.GetEvent<syntaxThemeMessage>().Subscribe(onChangeSyntaxTheme);
+            _ea.GetEvent<rightPanelTalkMessage>().Subscribe(onClickToTalk);
         }
 
         async void onClickToTalk()
         {
-            //string result = await _messageListener.RecognizeSpeechSync();
-            string result = "zoomin";
-            OperateCommandAsync(result);
+            _ea.GetEvent<onAzureMLWorking>().Publish();
+            var ret = await _messageListener.RecognizeSpeechSync();
+            OperateCommandAsync(ret.result);
+            _ea.GetEvent<onAzureMLEnded>().Publish(ret.origin);
         }
 
         private async void OperateCommandAsync(string result)
         {
-            if( result == SpeakOrder.저장하기.ToString() )
+            if( result == "save")
             {
                 onSaveFile();
             }
-            else if ( result == SpeakOrder.저장하고나가기.ToString())
+            else if ( result == "saveAsExit")
             {
                 onSaveFile();
                 foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
@@ -120,12 +122,12 @@ namespace MLCodeEditor.ViewModels
             {
                 editor.ScrollToHome();
             }
-            else if (result == "zoomin")
+            else if (result == "zoomIn")
             {
                 editor.FontSize += 5;
                 editor.FontSize = Math.Min(editor.FontSize, 60);
             }
-            else if (result == "zoomout")
+            else if (result == "zoomOut")
             {
                 editor.FontSize -= 5;
                 editor.FontSize = Math.Max(editor.FontSize, 0);

@@ -1,4 +1,6 @@
-﻿using MLCodeEditor.Messages;
+﻿using System;
+using MLCodeEditor.Messages;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 
@@ -87,9 +89,46 @@ namespace MLCodeEditor.ViewModels
             }
         }
 
+        private string _spoken;
+        public string bSpoken
+        {
+            get { return _spoken; }
+            set { SetProperty(ref _spoken, value); }
+        }
+
+        private bool _btnEnabled = true; 
+        public bool bBtnEnabled
+        {
+            get { return _btnEnabled; }
+            set { SetProperty(ref _btnEnabled, value); }
+        }
+
+        private DelegateCommand _clickToTalk;
+        public DelegateCommand cClickToTalk =>
+            _clickToTalk ?? (_clickToTalk = new DelegateCommand(onClickToTalk));
+
         public RightPanelViewModel(IEventAggregator ea )
         {
             this._ea = ea;
+            _ea.GetEvent<onAzureMLEnded>().Subscribe(ButtonEnabled);
+            _ea.GetEvent<onAzureMLWorking>().Subscribe(ButtonDisabled);
         }
+
+        private void ButtonDisabled()
+        {
+            bBtnEnabled = false;
+        }
+
+        private void ButtonEnabled(string originSpeak)
+        {
+            bBtnEnabled = true;
+            bSpoken = originSpeak;
+        }
+
+        void onClickToTalk()
+        {
+            _ea.GetEvent<rightPanelTalkMessage>().Publish();
+        }
+
     }
 }

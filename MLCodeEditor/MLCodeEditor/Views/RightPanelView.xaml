@@ -43,6 +43,11 @@
                 </ComboBox>
             </DockPanel>
 
+            <TextBlock  Margin="0 20 10 0" HorizontalAlignment="Right" Text="{Binding bSpoken}" Foreground="{Binding FontColorTheme}"></TextBlock>
+            <Button Width="200" Height="50" Margin="0 20 10 0 " HorizontalAlignment="Right" Command="{Binding cClickToTalk}" IsEnabled="{Binding bBtnEnabled}" FontSize="30">
+            Talk
+            </Button>
+
         </StackPanel>
     </Grid>
 </UserControl>
