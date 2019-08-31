@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="MLCodeEditor.Views.RightPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:local="clr-namespace:MLCodeEditor.Views"
+             xmlns:prism ="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{Binding Theme, Mode=TwoWay}"
+            mc:Ignorable="d" 
+             >
+    <Grid>
+        <StackPanel Margin="20 50 0 0 ">
+            <DockPanel Margin="0 20 0 0">
+                <Label Foreground="{Binding FontColorTheme}" FontWeight="Bold"> Font </Label>
+                <ComboBox Width="200" HorizontalAlignment="Right" Margin="0 0 10 0" SelectedIndex="0">
+                    <ComboBoxItem> Consolas </ComboBoxItem>
+                </ComboBox>
+            </DockPanel>
+
+            <DockPanel Margin="0 20 0 0">
+                <Label Foreground="{Binding FontColorTheme}" FontWeight="Bold">Theme</Label>
+                <ComboBox Width="200" HorizontalAlignment="Right" Margin="0 0 10 0" SelectedIndex="1"  
+                          SelectedItem="{Binding bTheme, Mode=OneWayToSource}"
+                          >
+                    <ComboBoxItem> Dark   </ComboBoxItem>
+                    <ComboBoxItem> Light  </ComboBoxItem>
+                </ComboBox>
+            </DockPanel>
+
+            <DockPanel Margin="0 20 0 0">
+                <Label Foreground="{Binding FontColorTheme}" FontWeight="Bold">Language </Label>
+                <ComboBox Width="200" HorizontalAlignment="Right" Margin="0 0 10 0" SelectedIndex="0" 
+                          SelectedItem="{Binding bLanguage}">
+                    <ComboBoxItem> C++    </ComboBoxItem>
+                    <ComboBoxItem> Csharp </ComboBoxItem>
+                    <ComboBoxItem> Java </ComboBoxItem>
+                </ComboBox>
+            </DockPanel>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

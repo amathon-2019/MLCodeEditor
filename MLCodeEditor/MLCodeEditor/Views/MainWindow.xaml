@@ -1,0 +1,72 @@
+﻿<Window x:Class="MLCodeEditor.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:local="clr-namespace:MLCodeEditor"
+
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:views="clr-namespace:MLCodeEditor.Views"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+
+        xmlns:converter="clr-namespace:MLCodeEditor.Converter"
+        mc:Ignorable="d"
+        Title="MLCodeEditor" Height="869.277" Width="1287.952">
+    <Window.Resources>
+        <converter:HighlightingDefinitionConverter x:Key="HighlightingDefinitionConverter"></converter:HighlightingDefinitionConverter>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu >
+            <MenuItem Header="_File">
+                <MenuItem x:Name="openBtn" Header="_Open" Click="openBtn_Click" />
+                <MenuItem x:Name="saveBtn" Header="_Save" Click="saveBtn_Click"/>
+                <MenuItem x:Name="talkBtn" Header="_Talk" Command="{Binding cClicktoTalk}"/>
+                <Separator />
+                <MenuItem x:Name="ExitBtn" Header="_Exit" Click="ExitBtn_Click" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Command="Cut" />
+                <MenuItem Command="Copy" />
+                <MenuItem Command="Paste" />
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <views:RightPanelView Grid.Column="1"></views:RightPanelView>
+            <avalonEdit:TextEditor
+				Name="textEditor"
+				FontFamily="Consolas"
+				FontSize="10pt"
+                avalonEdit:Foreground="{Binding bFontColorTheme}"
+				SyntaxHighlighting="{Binding bSyntaxHighlighting, Converter={StaticResource HighlightingDefinitionConverter}}"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ShowLineNumbers="True"
+                LineNumbersForeground="Gray"
+                Cursor="Arrow"
+                TabIndex="4"
+                avalonEdit:Background="{Binding bTheme}"/>
+            <GridSplitter Grid.Row="1" Height="2" VerticalAlignment="Bottom"/>
+       </Grid>
+        <DockPanel Grid.Row="2">
+            <StatusBar>
+                <StatusBarItem>
+                    <TextBlock x:Name="lblPos" />
+                </StatusBarItem>
+                <StatusBarItem>
+                    <TextBlock x:Name="lblfmt" Text="{Binding SyntaxHighlighting.Name, ElementName=textEditor}"/>
+                </StatusBarItem>
+            </StatusBar>
+        </DockPanel>
+    </Grid>
+</Window>
