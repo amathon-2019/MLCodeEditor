@@ -12,4 +12,16 @@ namespace MLCodeEditor.Messages
      class syntaxThemeMessage : PubSubEvent<string>
     {
     }
+
+    class rightPanelTalkMessage : PubSubEvent
+    {
+    }
+
+    class onAzureMLWorking : PubSubEvent
+    {
+    }
+
+    class onAzureMLEnded : PubSubEvent<string>
+    {
+    }
 }

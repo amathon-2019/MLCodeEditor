@@ -24,7 +24,7 @@
                 <ComboBox Width="200" HorizontalAlignment="Right" Margin="0 0 10 0" SelectedIndex="1"  
                           SelectedItem="{Binding bTheme, Mode=OneWayToSource}"
                           >
-                    <ComboBoxItem> Dark   </ComboBoxItem>
+                    <ComboBoxItem> Formal </ComboBoxItem>
                     <ComboBoxItem> Light  </ComboBoxItem>
                 </ComboBox>
             </DockPanel>
@@ -42,6 +42,11 @@
 
                 </ComboBox>
             </DockPanel>
+
+            <TextBlock  Margin="0 20 10 0" HorizontalAlignment="Right" Text="{Binding bSpoken}" Foreground="{Binding FontColorTheme}"></TextBlock>
+            <Button Width="200" Height="50" Margin="0 20 10 0 " HorizontalAlignment="Right" Command="{Binding cClickToTalk}" IsEnabled="{Binding bBtnEnabled}" FontSize="30">
+            Talk
+            </Button>
 
         </StackPanel>
     </Grid>

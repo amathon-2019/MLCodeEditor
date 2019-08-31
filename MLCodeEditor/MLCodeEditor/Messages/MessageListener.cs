@@ -6,19 +6,7 @@ using Microsoft.CognitiveServices.Speech;
 
 namespace MLCodeEditor.Messages
 {
-    enum SpeakOrder
-    {
-        제일위로, 
-        제일아래로,
-        스크롤내려,
-        스크롤올려,
-        저장하기,
-        저장하고나가기,
-        검색해줘,
-        확대하기,
-        축소하기
-    };
-
+  
     public class MessageListener
     {
         private SpeechConfig config;
@@ -30,8 +18,8 @@ namespace MLCodeEditor.Messages
         /// <param name="lang"></param>
         public MessageListener(string lang)
         {
-            //this.config = SpeechConfig.FromSubscription(Environment.GetEnvironmentVariable("AZURE_KEY"), "westus");
-            //config.SpeechRecognitionLanguage = lang;
+            this.config = SpeechConfig.FromSubscription(Environment.GetEnvironmentVariable("AZURE_KEY"), "westus");
+            config.SpeechRecognitionLanguage = lang;
         }
 
         public async Task<(string origin, string result)> RecognizeSpeechSync()
@@ -70,9 +58,9 @@ namespace MLCodeEditor.Messages
             //convert
             (string orgin, string result) ret;
             
-            if(stt.Contains("저장", "세이브", "save"))
+            if(stt.Contains( "저장") || stt.Contains("세이브" ))
             {
-                if(stt.Contains("나가기", "닫기"))
+                if(stt.Contains("나가기") || stt.Contains ("닫기"))
                 {
                     ret = (stt, "saveAsExit");    
                 }
@@ -86,10 +74,10 @@ namespace MLCodeEditor.Messages
             }else if(stt.Contains("축소"))
             {
                 ret = (stt, "zoomOut");
-            }else if(stt.Contains("위","상단"))
+            }else if(stt.Contains("위") || stt.Contains("상단"))
             {
                 ret = (stt, "moveTop");
-            }else if(stt.Contains("아래","밑","하단"))
+            }else if(stt.Contains("아래") || stt.Contains("밑") || stt.Contains("하단"))
             {
                 ret = (stt, "moveBottom");
             }else

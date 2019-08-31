@@ -16,6 +16,9 @@
     <Window.Resources>
         <converter:HighlightingDefinitionConverter x:Key="HighlightingDefinitionConverter"></converter:HighlightingDefinitionConverter>
     </Window.Resources>
+    <Window.CommandBindings>
+    </Window.CommandBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -24,8 +27,8 @@
         </Grid.RowDefinitions>
         <Menu >
             <MenuItem Header="_File">
-                <MenuItem x:Name="openBtn" Header="_Open" Click="{Binding cOpenFile}" />
-                <MenuItem x:Name="saveBtn" Header="_Save" Click="{Binding cSaveFile}"/>
+                <MenuItem x:Name="openBtn" Header="_Open" Click="openBtn_Click"></MenuItem>
+                <MenuItem x:Name="saveBtn" Header="_Save" Click="saveBtn_Click"></MenuItem>
                 <MenuItem x:Name="talkBtn" Header="_Talk" Command="{Binding cClickToTalk}"/>
                 <Separator />
                 <MenuItem x:Name="ExitBtn" Header="_Exit" Click="ExitBtn_Click" />
@@ -53,6 +56,7 @@
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ShowLineNumbers="True"
                 LineNumbersForeground="Gray"
+                TextChanged="TextEditor_TextChanged"
                 Cursor="Arrow"
                 TabIndex="4"
                 avalonEdit:Background="{Binding bTheme}"/>

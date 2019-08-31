@@ -1,4 +1,6 @@
-﻿using MLCodeEditor.Messages;
+﻿using System;
+using MLCodeEditor.Messages;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 
@@ -22,18 +24,18 @@ namespace MLCodeEditor.ViewModels
             {
                 SetProperty(ref _ttheme, value);
 
-                string mainEditorColor = "#1E1E1E";
-                string mainEditorFontColor = "White";
+                string mainEditorColor = "#f9f9f9";
+                string mainEditorFontColor = "#272727";
 
                 if (string.IsNullOrEmpty(bTheme))
                 {
-                    mainEditorColor = "#1E1E1E";
-                    mainEditorFontColor = "White";
+                    mainEditorColor = "#f9f9f9";
+                    mainEditorFontColor = "#272727";
                 }
-                else if (bTheme.Contains("Dark"))
+                else if (bTheme.Contains("Formal"))
                 {
-                    mainEditorColor = "#1E1E1E";
-                    mainEditorFontColor = "White";
+                    mainEditorColor = "#f9f9f9";
+                    mainEditorFontColor = "#272727";
                 }
                 else if (bTheme.Contains("Light"))
                 {
@@ -52,8 +54,8 @@ namespace MLCodeEditor.ViewModels
             set
             {
                 SetProperty(ref _theme, value);
-                if (string.IsNullOrEmpty(bTheme)) Theme="#3E3E42";
-                else if (bTheme.Contains("Dark")) Theme = "#3E3E42";
+                if (string.IsNullOrEmpty(bTheme)) Theme = "#dbdbdb";
+                else if (bTheme.Contains("Formal")) Theme = "#dbdbdb";
                 else if (bTheme.Contains("Light")) Theme = "#6486de";
 
             }
@@ -87,9 +89,46 @@ namespace MLCodeEditor.ViewModels
             }
         }
 
+        private string _spoken;
+        public string bSpoken
+        {
+            get { return _spoken; }
+            set { SetProperty(ref _spoken, value); }
+        }
+
+        private bool _btnEnabled = true; 
+        public bool bBtnEnabled
+        {
+            get { return _btnEnabled; }
+            set { SetProperty(ref _btnEnabled, value); }
+        }
+
+        private DelegateCommand _clickToTalk;
+        public DelegateCommand cClickToTalk =>
+            _clickToTalk ?? (_clickToTalk = new DelegateCommand(onClickToTalk));
+
         public RightPanelViewModel(IEventAggregator ea )
         {
             this._ea = ea;
+            _ea.GetEvent<onAzureMLEnded>().Subscribe(ButtonEnabled);
+            _ea.GetEvent<onAzureMLWorking>().Subscribe(ButtonDisabled);
         }
+
+        private void ButtonDisabled()
+        {
+            bBtnEnabled = false;
+        }
+
+        private void ButtonEnabled(string originSpeak)
+        {
+            bBtnEnabled = true;
+            bSpoken = originSpeak;
+        }
+
+        void onClickToTalk()
+        {
+            _ea.GetEvent<rightPanelTalkMessage>().Publish();
+        }
+
     }
 }
