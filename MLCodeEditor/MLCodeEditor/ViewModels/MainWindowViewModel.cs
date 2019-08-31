@@ -1,17 +1,11 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.S3.Transfer;
+﻿using System;
+using System.IO;
+using ICSharpCode.AvalonEdit.Highlighting;
+using Microsoft.Win32;
 using MLCodeEditor.Messages;
-using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace MLCodeEditor.ViewModels
 {
@@ -39,109 +33,82 @@ namespace MLCodeEditor.ViewModels
             set { SetProperty(ref _syntaxHighlighting, value); }
         }
 
-        [DllImport("winmm.dll", EntryPoint = "mciSendStringA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        private static extern int mciSendString(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
+        private string _fileName;
+        public string bFileName
+        {
+            get { return _fileName; }
+            set { SetProperty(ref _fileName, value); }
+        }
+
+        private string _sourceCode;
+        public string bSourceCode
+        {
+            get { return _sourceCode; }
+            set { SetProperty(ref _sourceCode, value); }
+        }
+
 
         private DelegateCommand _clickToTalk;
         public DelegateCommand cClickToTalk =>
             _clickToTalk ?? (_clickToTalk = new DelegateCommand(onClickToTalk));
 
-        private IAmazonS3 _client;
-        private readonly IEventAggregator _ea;
+        private DelegateCommand _saveFile;
+        public DelegateCommand cSaveFile =>
+            _saveFile ?? (_saveFile = new DelegateCommand(onSaveFile));
 
-        private readonly string bucketName = "mlcodeeditor";
-        private readonly string filePath = "saved.wav";
+
+        private DelegateCommand _openFile;
+        public DelegateCommand cOpenFile =>
+            _openFile ?? (_openFile = new DelegateCommand(onOpenFile));
+
+        private void onOpenFile()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.CheckFileExists = true;
+            if(dlg.ShowDialog() ?? false)
+            {
+                bFileName = dlg.FileName;
+                File.ReadAllText(bFileName);
+                textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(bFileName));
+            }
+
+        }
+
+        private void onSaveFile()
+        {
+        }
+
+        void oncSaveFile()
+        {
+
+        }
+
+        private readonly IEventAggregator _ea;
+        private readonly MessageListener _messageListener;
 
         public MainWindowViewModel(IEventAggregator ea)
         {
-            this._ea = ea;
+            _ea = ea;
+            _messageListener = new MessageListener("ko-KR");
             _ea.GetEvent<ThemeMessage>().Subscribe(onChangeTheme);
             _ea.GetEvent<fontColorThemeMessage>().Subscribe(onChangeFontColorTheme);
             _ea.GetEvent<syntaxThemeMessage>().Subscribe(onChangeSyntaxTheme);
         }
 
-        void onClickToTalk()
+        async void onClickToTalk()
         {
-            mciSendString("open new Type waveaudio Alias recsound", "", 0, 0);
-            mciSendString("record recsound", "", 0, 0);
-            Console.WriteLine("recording, press Enter to stop and save ...");
-            DispatcherTimer dt = new DispatcherTimer();
-
-            dt.Interval = new TimeSpan(0, 0, 3);
-            dt.Tick +=  async (s, e) =>
-            {
-                mciSendString("save recsound saved.wav", "", 0, 0);
-                mciSendString("close recsound ", "", 0, 0);
-                Console.WriteLine("recorded");
-
-                string result = await SendWavFileAndGetReuqest();
-                OperateCommandAsync(result);
-                dt.Stop();
-            };
-            dt.Start();
-        }
-
-        private async Task<string> SendWavFileAndGetReuqest()
-        {
-            try
-            {
-                TransferUtility ftu =
-                    new TransferUtility(_client);
-
-                PutObjectRequest request = new PutObjectRequest()
-                {
-                    BucketName = string.Format(@"{0}", bucketName),
-                    FilePath = filePath
-                };
-                PutObjectResponse response1 = await _client.PutObjectAsync(request);
-                //s3 put 
-
-                GetPreSignedUrlRequest request2 = new GetPreSignedUrlRequest
-                {
-                    BucketName = bucketName,
-                    Key = filePath,
-                    Expires = DateTime.Now.AddMinutes(10)
-                };
-
-                string urlString = _client.GetPreSignedURL(request2);
-                //s3 link 
-
-                JObject jobject = new JObject();
-                jobject["MediaLeng"] = "ko-KR";
-                jobject["MediaFileUri"] = urlString;
-
-                var rrequest = WebRequest.Create("https://22aizbnnx6.execute-api.ap-northeast-2.amazonaws.com/mlCodeEdit/mediatotext");
-                rrequest.ContentType = "application/json";
-                rrequest.Method = "POST";
-                using (var streamWriter = new StreamWriter(rrequest.GetRequestStream()))
-                {
-                    string json = jobject.ToString();
-                    streamWriter.Write(json);
-                }
-
-                var httpResponse = (HttpWebResponse)rrequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    var result = streamReader.ReadToEnd();
-                    Console.WriteLine(result.ToString());
-                    return result;
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            //string result = await _messageListener.RecognizeSpeechSync();
+            string result = "저장하기";
+            OperateCommandAsync(result);
         }
 
         private async void OperateCommandAsync(string result)
         {
-            result = result.ToLower();
-
-            if( result == "save")
+            if( result == SpeakOrder.저장하기.ToString() )
             {
 
             }
-            else if ( result == "save and exit")
+            else if ( result == SpeakOrder.저장하고나가기.ToString())
             {
 
             }
@@ -161,12 +128,10 @@ namespace MLCodeEditor.ViewModels
             {
 
             }
-
         }
 
         private void onChangeTheme(string theme) => bTheme = theme;
         private void onChangeFontColorTheme(string fontColor) => bFontColorTheme = fontColor;
         private void onChangeSyntaxTheme(string syntax) => bSyntaxHighlighting = syntax;
-
     }
 }
