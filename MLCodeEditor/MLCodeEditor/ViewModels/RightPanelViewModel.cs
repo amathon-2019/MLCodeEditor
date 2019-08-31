@@ -22,18 +22,18 @@ namespace MLCodeEditor.ViewModels
             {
                 SetProperty(ref _ttheme, value);
 
-                string mainEditorColor = "#1E1E1E";
-                string mainEditorFontColor = "White";
+                string mainEditorColor = "#f9f9f9";
+                string mainEditorFontColor = "#272727";
 
                 if (string.IsNullOrEmpty(bTheme))
                 {
-                    mainEditorColor = "#1E1E1E";
-                    mainEditorFontColor = "White";
+                    mainEditorColor = "#f9f9f9";
+                    mainEditorFontColor = "#272727";
                 }
-                else if (bTheme.Contains("Dark"))
+                else if (bTheme.Contains("Formal"))
                 {
-                    mainEditorColor = "#1E1E1E";
-                    mainEditorFontColor = "White";
+                    mainEditorColor = "#f9f9f9";
+                    mainEditorFontColor = "#272727";
                 }
                 else if (bTheme.Contains("Light"))
                 {
@@ -52,8 +52,8 @@ namespace MLCodeEditor.ViewModels
             set
             {
                 SetProperty(ref _theme, value);
-                if (string.IsNullOrEmpty(bTheme)) Theme="#3E3E42";
-                else if (bTheme.Contains("Dark")) Theme = "#3E3E42";
+                if (string.IsNullOrEmpty(bTheme)) Theme = "#dbdbdb";
+                else if (bTheme.Contains("Formal")) Theme = "#dbdbdb";
                 else if (bTheme.Contains("Light")) Theme = "#6486de";
 
             }

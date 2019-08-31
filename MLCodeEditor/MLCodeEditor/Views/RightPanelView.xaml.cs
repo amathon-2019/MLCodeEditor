@@ -1,7 +1,4 @@
-﻿using MLCodeEditor.Messages;
-using Prism.Events;
-using System.Windows.Controls;
-using System.Windows.Media;
+﻿using System.Windows.Controls;
 
 namespace MLCodeEditor.Views
 {

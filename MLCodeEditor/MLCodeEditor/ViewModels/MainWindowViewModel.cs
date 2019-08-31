@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
 using MLCodeEditor.Messages;
 using Prism.Commands;
@@ -47,7 +46,6 @@ namespace MLCodeEditor.ViewModels
             set { SetProperty(ref _sourceCode, value); }
         }
 
-
         private DelegateCommand _clickToTalk;
         public DelegateCommand cClickToTalk =>
             _clickToTalk ?? (_clickToTalk = new DelegateCommand(onClickToTalk));
@@ -57,30 +55,28 @@ namespace MLCodeEditor.ViewModels
             _saveFile ?? (_saveFile = new DelegateCommand(onSaveFile));
 
 
-        private DelegateCommand _openFile;
-        public DelegateCommand cOpenFile =>
-            _openFile ?? (_openFile = new DelegateCommand(onOpenFile));
 
-        private void onOpenFile()
+        public ICSharpCode.AvalonEdit.TextEditor editor { get; set; }
+
+        private async void onSaveFile()
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.CheckFileExists = true;
-            if(dlg.ShowDialog() ?? false)
+            if(bFileName == null)
             {
-                bFileName = dlg.FileName;
-                File.ReadAllText(bFileName);
-                textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(bFileName));
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.DefaultExt = ".txt";
+                if (dlg.ShowDialog() ?? false) bFileName = dlg.FileName;
             }
 
-        }
+            if (bFileName == null) return;
+            if (File.Exists(bFileName)) File.Delete(bFileName);
 
-        private void onSaveFile()
-        {
-        }
-
-        void oncSaveFile()
-        {
-
+            using (var stream = File.Open(bFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                using (var sr = new StreamWriter(stream))
+                {
+                    sr.Write(bSourceCode ?? "");
+                }
+            }
         }
 
         private readonly IEventAggregator _ea;
@@ -98,7 +94,7 @@ namespace MLCodeEditor.ViewModels
         async void onClickToTalk()
         {
             //string result = await _messageListener.RecognizeSpeechSync();
-            string result = "저장하기";
+            string result = "zoomin";
             OperateCommandAsync(result);
         }
 
@@ -106,27 +102,33 @@ namespace MLCodeEditor.ViewModels
         {
             if( result == SpeakOrder.저장하기.ToString() )
             {
-
+                onSaveFile();
             }
             else if ( result == SpeakOrder.저장하고나가기.ToString())
             {
-
+                onSaveFile();
+                foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
+                {
+                    window.Close();
+                }
             }
-            else if ( result == "scroll down")
+            else if ( result == "moveBottom")
             {
-
+                editor.ScrollToEnd();
             }
-            else if (result == "scroll up")
+            else if (result == "moveTop")
             {
-
+                editor.ScrollToHome();
             }
-            else if (result == "theme dark")
+            else if (result == "zoomin")
             {
-
+                editor.FontSize += 5;
+                editor.FontSize = Math.Min(editor.FontSize, 60);
             }
-            else if (result == "theme light")
+            else if (result == "zoomout")
             {
-
+                editor.FontSize -= 5;
+                editor.FontSize = Math.Max(editor.FontSize, 0);
             }
         }
 

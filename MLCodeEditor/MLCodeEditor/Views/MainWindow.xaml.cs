@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Search;
+using MLCodeEditor.ViewModels;
 
 namespace MLCodeEditor.Views
 {
@@ -19,10 +20,10 @@ namespace MLCodeEditor.Views
         public MainWindow()
         {
             InitializeComponent();
-
             textEditor.TextArea.Caret.PositionChanged += DisplayPosition;
-
             SearchPanel.Install(textEditor);
+            var myvm = this.DataContext as MainWindowViewModel;
+            myvm.editor = textEditor;
         }
 
         private void openBtn_Click(object sender, RoutedEventArgs e)
@@ -31,7 +32,8 @@ namespace MLCodeEditor.Views
             dlg.CheckFileExists = true;
             if(dlg.ShowDialog() ?? false)
             {
-                currentFileName = dlg.FileName;
+                var myvm = this.DataContext as MainWindowViewModel;
+                myvm.bFileName = currentFileName = dlg.FileName;
                 textEditor.Load(currentFileName);
                 textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(currentFileName));
             }
@@ -45,10 +47,12 @@ namespace MLCodeEditor.Views
                 SaveFileDialog dlg = new SaveFileDialog();
                 dlg.DefaultExt = ".txt";
                 if (dlg.ShowDialog() ?? false)
-                    currentFileName = dlg.FileName;
+                {
+                    var myvm = this.DataContext as MainWindowViewModel;
+                    myvm.bFileName = currentFileName = dlg.FileName;
+                }
                 else return;
             }
-
             textEditor.Save(currentFileName);
         }
 
@@ -61,6 +65,22 @@ namespace MLCodeEditor.Views
         {
             TextViewPosition tp = textEditor.TextArea.Caret.Position;
             lblPos.Text = "Line: " + tp.Line + " Col: " + tp.Column;
+        }
+
+        private void TextEditor_TextChanged(object sender, EventArgs e)
+        {
+            var myvm = this.DataContext as MainWindowViewModel;
+            myvm.bSourceCode = textEditor.Document.Text;
+        }
+
+        private void Save_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void Open_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+
         }
     }
 }

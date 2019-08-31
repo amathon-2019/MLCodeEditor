@@ -24,7 +24,7 @@
                 <ComboBox Width="200" HorizontalAlignment="Right" Margin="0 0 10 0" SelectedIndex="1"  
                           SelectedItem="{Binding bTheme, Mode=OneWayToSource}"
                           >
-                    <ComboBoxItem> Dark   </ComboBoxItem>
+                    <ComboBoxItem> Formal </ComboBoxItem>
                     <ComboBoxItem> Light  </ComboBoxItem>
                 </ComboBox>
             </DockPanel>
