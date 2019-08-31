@@ -77,7 +77,7 @@ namespace MLCodeEditor.Messages
             }else if(stt.Contains("위") || stt.Contains("상단"))
             {
                 ret = (stt, "moveTop");
-            }else if(stt.Contains("아래") || stt.Contains("밑") || stt.Contains("하단"))
+            }else if(stt.Contains("아래") || stt.Contains("밑으로") || stt.Contains("하단"))
             {
                 ret = (stt, "moveBottom");
             }else

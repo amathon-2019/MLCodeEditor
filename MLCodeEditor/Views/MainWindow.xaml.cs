@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -21,6 +22,16 @@ namespace MLCodeEditor.Views
         {
             InitializeComponent();
             textEditor.TextArea.Caret.PositionChanged += DisplayPosition;
+            textEditor.PreviewMouseWheel += (s, e) =>
+            {
+                if (!Keyboard.IsKeyDown(Key.LeftCtrl))
+                    return;
+                if (e.Delta > 0)
+                    textEditor.FontSize += 3;
+                else if (e.Delta < 0 && textEditor.FontSize > 3)
+                    textEditor.FontSize -= 3;
+            };
+
             SearchPanel.Install(textEditor);
             var myvm = this.DataContext as MainWindowViewModel;
             myvm.editor = textEditor;
