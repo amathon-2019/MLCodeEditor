@@ -11,7 +11,6 @@ namespace MLCodeEditor
         {
             return Container.Resolve<MainWindow>();
         }
-
         protected override void InitializeShell()
         {
             Application.Current.MainWindow.Show();

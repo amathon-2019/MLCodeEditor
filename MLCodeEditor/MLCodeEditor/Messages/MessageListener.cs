@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using Microsoft.CognitiveServices.Speech;
@@ -24,10 +21,9 @@ namespace MLCodeEditor.Messages
             config.SpeechRecognitionLanguage = lang;
         }
 
-        public async Task RecognizeSpeechSync()
+        public async Task<string> RecognizeSpeechSync()
         {
-            string stt;
-
+            string stt = string.Empty;
             using (var recognizer = new SpeechRecognizer(config))
             {
                 // Start Listening..
@@ -55,6 +51,7 @@ namespace MLCodeEditor.Messages
                         break;
                 }
             }
+            Debug.WriteLine(stt);
             return stt;
         }
     }
