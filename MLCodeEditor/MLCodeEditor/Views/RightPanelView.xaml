@@ -36,6 +36,10 @@
                     <ComboBoxItem> C++    </ComboBoxItem>
                     <ComboBoxItem> Csharp </ComboBoxItem>
                     <ComboBoxItem> Java </ComboBoxItem>
+                    <ComboBoxItem> js </ComboBoxItem>
+                    <ComboBoxItem> HTML </ComboBoxItem>
+                    <ComboBoxItem> XML </ComboBoxItem>
+
                 </ComboBox>
             </DockPanel>
 

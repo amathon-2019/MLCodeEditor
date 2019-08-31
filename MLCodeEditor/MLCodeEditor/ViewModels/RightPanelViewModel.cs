@@ -77,8 +77,11 @@ namespace MLCodeEditor.ViewModels
                 string language = "";
                 if (string.IsNullOrEmpty(bLanguage)) language = "C++";
                 else if (bLanguage.Contains("C++")) language = "C++";
-                else if (bLanguage.ToLower().Contains("java")) language = "java";
+                else if (bLanguage.ToLower().Contains("java")) language = "Java";
                 else if (bLanguage.ToLower().Contains("csharp")) language = "C#";
+                else if (bLanguage.ToLower().Contains("js")) language = "JavaScript";
+                else if (bLanguage.ToLower().Contains("html")) language = "HTML";
+                else if (bLanguage.ToLower().Contains("xml")) language = "XML";
 
                 _ea.GetEvent<syntaxThemeMessage>().Publish(language);
             }
