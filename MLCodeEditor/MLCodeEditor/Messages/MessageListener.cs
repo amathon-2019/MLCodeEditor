@@ -34,7 +34,7 @@ namespace MLCodeEditor.Messages
             //config.SpeechRecognitionLanguage = lang;
         }
 
-        public async Task<string> RecognizeSpeechSync()
+        public async Task<(string origin, string result)> RecognizeSpeechSync()
         {
             string stt = string.Empty;
             using (var recognizer = new SpeechRecognizer(config))
@@ -64,8 +64,39 @@ namespace MLCodeEditor.Messages
                         break;
                 }
             }
+            
             Debug.WriteLine(stt);
-            return stt;
+
+            //convert
+            (string orgin, string result) ret;
+            
+            if(stt.Contains("저장", "세이브", "save"))
+            {
+                if(stt.Contains("나가기", "닫기"))
+                {
+                    ret = (stt, "saveAsExit");    
+                }
+                else
+                {
+                    ret = (stt, "save");
+                }
+            }else if(stt.Contains("확대"))
+            {
+                ret = (stt, "zoomIn");
+            }else if(stt.Contains("축소"))
+            {
+                ret = (stt, "zoomOut");
+            }else if(stt.Contains("위","상단"))
+            {
+                ret = (stt, "moveTop");
+            }else if(stt.Contains("아래","밑","하단"))
+            {
+                ret = (stt, "moveBottom");
+            }else
+            {
+                ret = (stt, "none");
+            }
+            return ret;
         }
     }
 }
