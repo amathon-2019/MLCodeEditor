@@ -83,15 +83,5 @@ namespace MLCodeEditor.Views
             var myvm = this.DataContext as MainWindowViewModel;
             myvm.bSourceCode = textEditor.Document.Text;
         }
-
-        private void Save_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-
-        }
-
-        private void Open_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-
-        }
     }
 }

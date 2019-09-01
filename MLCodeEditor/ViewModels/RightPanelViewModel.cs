@@ -77,7 +77,7 @@ namespace MLCodeEditor.ViewModels
             {
                 SetProperty(ref _language, value);
                 string language = "";
-                if (string.IsNullOrEmpty(bLanguage)) language = "C++";
+                if (string.IsNullOrEmpty(bLanguage)) language = "Text";
                 else if (bLanguage.Contains("C++")) language = "C++";
                 else if (bLanguage.ToLower().Contains("java")) language = "Java";
                 else if (bLanguage.ToLower().Contains("csharp")) language = "C#";

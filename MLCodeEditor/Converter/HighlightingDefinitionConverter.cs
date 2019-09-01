@@ -11,12 +11,14 @@ namespace MLCodeEditor.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Converter.ConvertFrom(value);
+            // return Converter.ConvertFrom(value);
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Converter.ConvertToString(value);
+            // return Converter.ConvertToString(value);
+            return null;
         }
     }
 }

@@ -29,7 +29,7 @@
                 </ComboBox>
             </DockPanel>
 
-            <DockPanel Margin="0 20 0 0">
+            <!--<DockPanel Margin="0 20 0 0">
                 <Label Foreground="{Binding FontColorTheme}" FontWeight="Bold">Language </Label>
                 <ComboBox Width="200" HorizontalAlignment="Right" Margin="0 0 10 0" SelectedIndex="0" 
                           SelectedItem="{Binding bLanguage}">
@@ -41,7 +41,7 @@
                     <ComboBoxItem> XML </ComboBoxItem>
 
                 </ComboBox>
-            </DockPanel>
+            </DockPanel>-->
 
             <TextBlock  Margin="0 20 10 0" HorizontalAlignment="Right" Text="{Binding bSpoken}" Foreground="{Binding FontColorTheme}"></TextBlock>
             <Button Width="200" Height="50" Margin="0 20 10 0 " HorizontalAlignment="Right" Command="{Binding cClickToTalk}" IsEnabled="{Binding bBtnEnabled}" FontSize="30">
